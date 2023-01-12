@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 const DynamicInput = (props) => {
 
 const attributes={
-    // variant:'outlined',
     ...props,
 };
 

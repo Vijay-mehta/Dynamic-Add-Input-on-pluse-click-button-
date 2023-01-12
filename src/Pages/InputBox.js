@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import DynamicInput from '../Components/DynamicInput'
 import DynamicButton from '../Components/DynamicButton'
+import {Button} from '@mui/material'
 
 const InputBox = () => {
 
     const [inputField, setInputField] = useState([{ firstname: '', email: "" }])
-console.log(inputField)
+    const [error,setError] =useState([])
+    // console.log(error)
 
     function handleAdd() {
         const values = [...inputField];
@@ -20,12 +22,32 @@ console.log(inputField)
         setInputField(remove);
     }
 
+    
+
     const handleChange = (e, index) => {
         const changeValues = [...inputField];
         changeValues[index][e.target.name] = e.target.value
         setInputField(changeValues)
+        inputError();
     }
 
+    const handleSubmit=(e)=>{
+        e.preventDefault();
+        console.log(inputField)
+
+        inputError();
+
+    }
+
+ const   inputError=()=>{
+    let arrayOfIndex=[]
+    inputField.map((item,index)=>{
+        if(item.firstname === '' || item.email === ''){
+            arrayOfIndex.push({index:index,name:item.firstname,email:item.email})
+        }
+    })
+    setError([...arrayOfIndex])
+ }
 
 
 
@@ -39,12 +61,13 @@ console.log(inputField)
 
 
 
-            <form>
+            <form onSubmit={handleSubmit}>
                 {
                     inputField.map((inputField, index) => {
                         return (
                             <div key={`${inputField}-${index}`} style={{ display: "flex", alignItems: "baseline", justifyContent: "center" }}>
                                 <DynamicInput
+                                value={inputField.firstname}
                                     label="Name"
                                     placeholder="Name"
                                     style={{ margin: " 0 10px" }}
@@ -53,6 +76,7 @@ console.log(inputField)
 
                                 />
                                 <DynamicInput
+                                value={inputField.email}
                                     label="Email"
                                     placeholder="Email"
                                     name="email"
@@ -78,14 +102,36 @@ console.log(inputField)
                                     >-</DynamicButton> : ''
 
                                 }
+                                      {
+                            error.map((item)=>{
+                              
+                                if(item.index === index){
+                                    return(
+
+                                    <div key={index
+                                    }>
+                                                                                <p style={{color:"red"}}>Empty </p>
+
+                                    </div>
+                                
+                                        )
+
+                                    
+                                }
+                            })
+                       }
 
 
                             </div>
+                           
 
                         )
-
+                    
+                  
                     })
                 }
+                <DynamicButton variant="contained" type='submit' style={{display:"flex" ,margin:"0 auto" ,marginTop:"10px"}} >Submit</DynamicButton>
+
             </form>
 
 
